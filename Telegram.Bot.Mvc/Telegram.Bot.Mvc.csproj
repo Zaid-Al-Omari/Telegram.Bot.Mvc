@@ -3,11 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>Telegram.Bot.Mvc</PackageId>
-    <PackageVersion>1.0.0</PackageVersion>
+    <PackageVersion>1.0.1</PackageVersion>
     <Authors>Zaid Al-Omari</Authors>
     <Description>An MVC-like framework to create Telegram bots</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>First release</PackageReleaseNotes>
+    <PackageReleaseNotes>A working release for standalone and webhooks.</PackageReleaseNotes>
     <Copyright>Copyright 2017 (c) Zaid Al-Omari. All rights reserved.</Copyright>
     <PackageTags>telegram bot mvc framework client</PackageTags>
   </PropertyGroup>
