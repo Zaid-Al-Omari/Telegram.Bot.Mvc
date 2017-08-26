@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace Telegram.BotMVC.Framework
+namespace Telegram.Bot.Mvc.Framework
 {
     public class BotSession {
 

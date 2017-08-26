@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Telegram.BotMVC.Core;
+using Telegram.Bot.Mvc.Core;
 
-namespace Telegram.BotMVC.Scheduler
+namespace Telegram.Bot.Mvc.Scheduler
 {
     public class PerSecondScheduler : IDisposable {
         private ILogger _logger;

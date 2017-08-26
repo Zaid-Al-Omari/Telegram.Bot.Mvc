@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Telegram.BotMVC.Core
+namespace Telegram.Bot.Mvc.Core
 {
     public class BotRouteData {
 

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Telegram.Bot.Types.Enums;
-using Telegram.BotMVC.Core;
+using Telegram.Bot.Mvc.Core;
 
-namespace Telegram.BotMVC.Framework {
+namespace Telegram.Bot.Mvc.Framework {
     public class BotRouter {
 
         protected IEnumerable<Type> Controllers { get; }
@@ -52,7 +52,7 @@ namespace Telegram.BotMVC.Framework {
             context.RouteData = new BotRouteData(
                 controller.GetType().Name,
                 resolutionResult.Method.Name,
-                parameters == null ? new string[] { "NULL: BODY", body }.AsEnumerable() : parameters.Select(x => x == null ? "null" : x.ToString())
+                parameters == null ? new string[] { body }.AsEnumerable() : parameters.Select(x => x == null ? "null" : x.ToString())
                 );
             // Method Invocation ...
             return resolutionResult.Method.Invoke(controller, parameters) as Task;

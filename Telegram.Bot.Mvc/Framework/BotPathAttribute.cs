@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot.Types.Enums;
 
-namespace Telegram.BotMVC.Core
+namespace Telegram.Bot.Mvc.Framework
 {
     public class BotPathAttribute : Attribute {
 

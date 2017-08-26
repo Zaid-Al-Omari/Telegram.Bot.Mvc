@@ -4,25 +4,35 @@ using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.BotMVC.Core;
+using Telegram.Bot.Mvc.Core;
 
-namespace Telegram.BotMVC.Framework
+namespace Telegram.Bot.Mvc.Framework
 {
-    public class BotListener {
+    public class BotListener  : IDisposable{
 
         private ILogger _logger;
-        private ITelegramBotClient _bot;
         private BotRouter _router;
         private BotSession _session;
+
         public User BotInfo { get; protected set; }
+        public ITelegramBotClient Bot { get; protected set; }
+
+
+
         public BotListener(string token, BotRouter router, ILogger logger) {
             _router = router;
             _logger = logger;
-            _bot = new TelegramBotClient(token);
-            BotInfo = _bot.GetMeAsync().Result;
-            _bot.OnReceiveError += Bot_OnReceiveError;
-            _bot.OnReceiveGeneralError += Bot_OnReceiveGeneralError;
-            _bot.OnUpdate += _bot_OnUpdate;
+            Bot = new TelegramBotClient(token);
+            BotInfo = Bot.GetMeAsync().Result;
+            Bot.OnReceiveError += Bot_OnReceiveError;
+            Bot.OnReceiveGeneralError += Bot_OnReceiveGeneralError;
+            Bot.OnUpdate += _bot_OnUpdate;
+        }
+
+        public BotListener(string token, ILogger logger) 
+            : this(token, new BotRouter(new BotControllerFactory()), logger)
+        {
+
         }
 
         private async void _bot_OnUpdate(object sender, Bot.Args.UpdateEventArgs e) {
@@ -43,16 +53,37 @@ namespace Telegram.BotMVC.Framework
             _logger.Log(e.ApiRequestException);
         }
 
-        public void SetSession(BotSession session) {
-            _session = session;
-        }
-
-        public void Start() {
-            _bot.StartReceiving();
+        public BotSession Start() {
+            Bot.StartReceiving();
+            if(_session == null) _session = new BotSession(Bot, _router);
+            return _session;
         }
 
         public void Stop() {
-            _bot.StopReceiving();
+            Bot.StopReceiving();
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                }
+                Bot = null;
+                _router = null;
+                _session = null;
+                disposedValue = true;
+            }
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+        #endregion
     }
 }

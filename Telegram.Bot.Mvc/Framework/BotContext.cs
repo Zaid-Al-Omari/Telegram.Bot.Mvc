@@ -1,8 +1,8 @@
 ﻿using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.BotMVC.Core;
+using Telegram.Bot.Mvc.Core;
 
-namespace Telegram.BotMVC.Framework {
+namespace Telegram.Bot.Mvc.Framework {
     public class BotContext {
 
         public BotContext(
