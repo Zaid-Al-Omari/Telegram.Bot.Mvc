@@ -14,7 +14,7 @@ namespace Telegram.Bot.Mvc.Framework
         public string Username => BotInfo.Username;
         public User BotInfo { get; protected set; }
 
-
+        public ILogger Logger { get; protected set; }
         public IBotRouter Router { get; protected set; }
         public ITelegramBotClient Bot { get; protected set; }
 
@@ -23,10 +23,11 @@ namespace Telegram.Bot.Mvc.Framework
 
         public dynamic BotBag { get; protected set; } = new ExpandoObject();
 
-        public BotSession(ITelegramBotClient client, IBotRouter router) {
+        public BotSession(ITelegramBotClient client, IBotRouter router, ILogger logger) {
             Bot = client;
-            BotInfo = client.GetMeAsync().Result;
+            Logger = logger;
             Router = router;
+            BotInfo = client.GetMeAsync().Result;
         }
 
         public async Task RegisterCertificate(string certificatePath, string webHookPath)
