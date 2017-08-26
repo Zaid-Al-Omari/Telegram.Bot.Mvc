@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Telegram.Bot.Mvc", "Telegra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telegram.Bot.Mvc.StandAlone", "Telegram.Bot.Mvc.StandAlone\Telegram.Bot.Mvc.StandAlone.csproj", "{D939DF00-FB91-4C38-A994-EEFBBE117B63}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telegram.Bot.Mvc.WebHook", "Telegram.Bot.Mvc.WebHook\Telegram.Bot.Mvc.WebHook.csproj", "{F6653B95-49A1-4471-B647-245D28230A04}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D939DF00-FB91-4C38-A994-EEFBBE117B63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D939DF00-FB91-4C38-A994-EEFBBE117B63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D939DF00-FB91-4C38-A994-EEFBBE117B63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6653B95-49A1-4471-B647-245D28230A04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6653B95-49A1-4471-B647-245D28230A04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6653B95-49A1-4471-B647-245D28230A04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6653B95-49A1-4471-B647-245D28230A04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
