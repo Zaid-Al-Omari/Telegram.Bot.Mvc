@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telegram.Bot.Mvc.StandAlone
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telegram.Bot.Mvc.WebHook", "Telegram.Bot.Mvc.WebHook\Telegram.Bot.Mvc.WebHook.csproj", "{F6653B95-49A1-4471-B647-245D28230A04}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{E0770567-F310-4722-B5BF-592625544B71}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D939DF00-FB91-4C38-A994-EEFBBE117B63} = {E0770567-F310-4722-B5BF-592625544B71}
+		{F6653B95-49A1-4471-B647-245D28230A04} = {E0770567-F310-4722-B5BF-592625544B71}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A80D40C3-38AD-4E74-A365-F95D7241EBE8}

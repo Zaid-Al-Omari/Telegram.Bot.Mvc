@@ -4,5 +4,5 @@
 - Establish Command Routes.
 - Create Bot Controllers.
 - Create Actions To Handle Specific Commands.
-- Automatic Paramter Binding.
+- Automatic Parameters Binding.
 - Works Both For WebHooks & Stand Alone.
