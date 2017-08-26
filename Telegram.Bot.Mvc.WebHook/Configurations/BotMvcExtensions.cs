@@ -11,7 +11,7 @@ namespace Telegram.Bot.Mvc.WebHook.Configurations
 {
     public static class BotMvcExtensions
     {
-        public static string certificatepath = "";
+        public static string certificateFilePath = Path.Combine(Environment.CurrentDirectory, "Certificate", "cer.pem");
         public static string publicBaseUrl = "https://example.com/api/Webhooks/"; // should be mapped in UseMvc
         public static bool registerCertificate = true;
 
@@ -29,7 +29,7 @@ namespace Telegram.Bot.Mvc.WebHook.Configurations
             {
                 var session = new BotSession(new TelegramBotClient(token), router);
                 if (registerCertificate) session.RegisterCertificate(
-                    certificatepath,
+                    certificateFilePath,
                     Path.Combine(publicBaseUrl, session.Username)); 
                 sessions.Add(session.Username, session);
             }

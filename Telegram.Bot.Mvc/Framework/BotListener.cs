@@ -11,7 +11,7 @@ namespace Telegram.Bot.Mvc.Framework
     public class BotListener  : IDisposable{
 
         private ILogger _logger;
-        private BotRouter _router;
+        private IBotRouter _router;
         private BotSession _session;
 
         public User BotInfo { get; protected set; }
@@ -19,7 +19,7 @@ namespace Telegram.Bot.Mvc.Framework
 
 
 
-        public BotListener(string token, BotRouter router, ILogger logger) {
+        public BotListener(string token, IBotRouter router, ILogger logger) {
             _router = router;
             _logger = logger;
             Bot = new TelegramBotClient(token);

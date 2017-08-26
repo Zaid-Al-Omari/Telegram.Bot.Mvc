@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot;
+using Telegram.Bot.Mvc.Core;
 using Telegram.Bot.Types;
 
 namespace Telegram.Bot.Mvc.Framework
@@ -14,7 +15,7 @@ namespace Telegram.Bot.Mvc.Framework
         public User BotInfo { get; protected set; }
 
 
-        public BotRouter Router { get; protected set; }
+        public IBotRouter Router { get; protected set; }
         public ITelegramBotClient Bot { get; protected set; }
 
 
@@ -22,7 +23,7 @@ namespace Telegram.Bot.Mvc.Framework
 
         public dynamic BotBag { get; protected set; } = new ExpandoObject();
 
-        public BotSession(ITelegramBotClient client, BotRouter router) {
+        public BotSession(ITelegramBotClient client, IBotRouter router) {
             Bot = client;
             BotInfo = client.GetMeAsync().Result;
             Router = router;

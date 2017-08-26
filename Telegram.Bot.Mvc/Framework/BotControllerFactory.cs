@@ -1,7 +1,9 @@
 ﻿using System;
+using Telegram.Bot.Mvc.Core;
 
 namespace Telegram.Bot.Mvc.Framework {
-    public class BotControllerFactory {
+    public class BotControllerFactory : IBotControllerFactory
+    {
 
         public BotController Create<TController>(BotContext context) where TController : BotController, new() {
             return new TController() { Context = context };

@@ -7,12 +7,13 @@ using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Mvc.Core;
 
 namespace Telegram.Bot.Mvc.Framework {
-    public class BotRouter {
+    public class BotRouter : IBotRouter
+    {
 
         protected IEnumerable<Type> Controllers { get; }
-        protected BotControllerFactory ControllerFactory { get; set; }
+        protected IBotControllerFactory ControllerFactory { get; set; }
 
-        public BotRouter(BotControllerFactory factory) {
+        public BotRouter(IBotControllerFactory factory) {
             ControllerFactory = factory;
             Controllers = Assembly.GetEntryAssembly().GetTypes()
                 .Where(x => x.GetTypeInfo().IsSubclassOf(typeof(BotController)))
