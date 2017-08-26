@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Mvc.Framework;
+using System.IO;
+using Telegram.Bot.Mvc.WebHook.Configurations;
 
 namespace Telegram.Bot.Mvc.WebHook
 {
@@ -30,22 +32,8 @@ namespace Telegram.Bot.Mvc.WebHook
         {
             // Add framework services.
             services.AddMvc();
-            
+            services.AddBotMvc();
 
-            var router = new BotRouter(new BotControllerFactory());
-            services.AddSingleton(new Logger());
-            services.AddSingleton(router);
-
-            // Key-value pair of botUsername : BotSession
-            // ToDo: Get the tokens from the data store.
-            var tokens = new string[] { "356143438:AAG4zU9PGgB1_9Az_gWMnsPvSoL5QW2f3Fo" };
-            var sessions = new Dictionary<string, BotSession>();
-            foreach(var token in tokens)
-            {
-                var session = new BotSession(new TelegramBotClient(token), router);
-                sessions.Add(session.Username, session);
-            }
-            services.AddSingleton(sessions);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

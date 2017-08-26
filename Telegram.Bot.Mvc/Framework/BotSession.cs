@@ -27,5 +27,13 @@ namespace Telegram.Bot.Mvc.Framework
             BotInfo = client.GetMeAsync().Result;
             Router = router;
         }
+
+        public async Task RegisterCertificate(string certificatePath, string webHookPath)
+        {
+            using (var stream = new System.IO.FileStream(certificatePath, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+            {
+                await Bot.SetWebhookAsync(webHookPath, new FileToSend("cer.pem", stream));
+            }
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace Telegram.Bot.Mvc.StandAlone
             while (true)
             {
 
-                var token = "356143438:AAG4zU9PGgB1_9Az_gWMnsPvSoL5QW2f3Fo";
+                var token = "<token here>";
                 // Starting ...
                 var listener = new BotListener(token, Logger);
                 listener.Start();

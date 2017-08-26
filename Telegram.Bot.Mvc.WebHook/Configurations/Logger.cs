@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Telegram.Bot.Mvc.Core;
 
-namespace Telegram.Bot.Mvc.WebHook
+namespace Telegram.Bot.Mvc.WebHook.Configurations
 {
     public class Logger : ILogger
     {
