@@ -11,9 +11,15 @@ namespace Telegram.Bot.Mvc.WebHook.Configurations
 {
     public static class BotMvcExtensions
     {
-        public static string certificateFilePath = Path.Combine(Environment.CurrentDirectory, "Certificate", "cer.pem");
-        public static string publicBaseUrl = "https://example.com/api/Webhooks/"; // should be mapped in UseMvc
-        public static bool registerCertificate = true;
+        private static string certificateFilePath = Path.Combine(Environment.CurrentDirectory, "Certificate", "cer.pem");
+        private static string publicBaseUrl = "https://example.com/api/Webhooks/"; // should be mapped in UseMvc
+        private static bool registerCertificate = true;
+
+        private static IEnumerable<string> GetTokens()
+        {
+            // ToDo: Get the tokens from the data store.
+            return new string[] { "<tokens here>" };
+        }
 
         public static IServiceCollection AddBotMvc(this IServiceCollection services)
         {
@@ -22,8 +28,7 @@ namespace Telegram.Bot.Mvc.WebHook.Configurations
             services.AddSingleton(router);
 
             // Key-value pair of botUsername : BotSession
-            // ToDo: Get the tokens from the data store.
-            var tokens = new string[] { "<tokens here>" };
+            var tokens = GetTokens();
             var sessions = new Dictionary<string, BotSession>();
             foreach (var token in tokens)
             {
