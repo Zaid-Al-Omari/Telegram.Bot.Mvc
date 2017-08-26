@@ -12,7 +12,7 @@ namespace Telegram.Bot.Mvc.WebHook.Controllers
     public class WebhooksController : Controller
     {
         // POST api/Webhooks/[botUsername]
-        [HttpPost]
+        [HttpPost("{botUsername}")]
         public async Task<IActionResult> Post(
             [FromRoute] string botUsername, 
             [FromBody] Update update, 
@@ -26,11 +26,12 @@ namespace Telegram.Bot.Mvc.WebHook.Controllers
                 if (update == null) throw new ArgumentException("update is null!");
                 sessions.TryGetValue(botUsername, out session);
                 if (session == null) throw new ArgumentException("session is null, bot token is not registered!");
+                context = new BotContext(null, session, update);
                 await session.Router.Route(context);
             }
             catch (Exception ex)
             {
-                logger.Log(ex, context.RouteData);
+                logger.Log(ex, context?.RouteData);
             }
             return Ok(); // Suppress Errors ...
         }

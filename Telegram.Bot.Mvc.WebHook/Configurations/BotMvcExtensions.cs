@@ -38,7 +38,7 @@ namespace Telegram.Bot.Mvc.WebHook.Configurations
                     Path.Combine(publicBaseUrl, session.Username)).Wait(); 
                 sessions.Add(session.Username, session);
             }
-            services.AddSingleton(sessions);
+            services.AddSingleton<IDictionary<string, BotSession>>(sessions);
             return services;
         }
     }
