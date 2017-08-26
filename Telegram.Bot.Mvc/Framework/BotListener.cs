@@ -30,7 +30,7 @@ namespace Telegram.Bot.Mvc.Framework
         }
 
         public BotListener(string token, ILogger logger) 
-            : this(token, new BotRouter(new BotControllerFactory()), logger)
+            : this(token, new BotRouter(new BotControllerFactory(new Scheduler.PerSecondScheduler(logger, 30, 1))), logger)
         {
 
         }
@@ -55,7 +55,7 @@ namespace Telegram.Bot.Mvc.Framework
 
         public BotSession Start() {
             Bot.StartReceiving();
-            if(_session == null) _session = new BotSession(Bot, _router);
+            if(_session == null) _session = new BotSession(Bot, _router, _logger);
             return _session;
         }
 

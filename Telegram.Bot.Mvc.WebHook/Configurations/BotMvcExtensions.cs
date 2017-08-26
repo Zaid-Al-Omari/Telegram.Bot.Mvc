@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Telegram.Bot.Mvc.Core;
 using Telegram.Bot.Mvc.Framework;
+using Telegram.Bot.Mvc.Scheduler;
 
 namespace Telegram.Bot.Mvc.WebHook.Configurations
 {
@@ -23,16 +24,19 @@ namespace Telegram.Bot.Mvc.WebHook.Configurations
 
         public static IServiceCollection AddBotMvc(this IServiceCollection services)
         {
-            var router = new BotRouter(new BotControllerFactory());
-            services.AddSingleton(new Logger());
+            var logger = new Logger();
+            var scheduler = new PerSecondScheduler(logger, tasksCount: 30, inSeconds: 1);
+            var router = new BotRouter(new BotControllerFactory(scheduler));
+            services.AddSingleton<ILogger>(logger);
             services.AddSingleton(router);
+            services.AddSingleton(scheduler);
 
             // Key-value pair of botUsername : BotSession
             var tokens = GetTokens();
             var sessions = new Dictionary<string, BotSession>();
             foreach (var token in tokens)
             {
-                var session = new BotSession(new TelegramBotClient(token), router);
+                var session = new BotSession(new TelegramBotClient(token), router, logger);
                 if (registerCertificate) session.RegisterCertificate(
                     certificateFilePath,
                     Path.Combine(publicBaseUrl, session.Username)).Wait(); 
