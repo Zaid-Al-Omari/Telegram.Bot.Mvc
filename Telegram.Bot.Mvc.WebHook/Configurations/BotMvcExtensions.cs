@@ -36,7 +36,7 @@ namespace Telegram.Bot.Mvc.WebHook.Configurations
             var sessions = new Dictionary<string, BotSession>();
             foreach (var token in tokens)
             {
-                var session = new BotSession(new TelegramBotClient(token), router, logger);
+                var session = new BotSession(new TelegramBotClient(token), router, logger, token);
                 if (registerCertificate) session.RegisterCertificate(
                     certificateFilePath,
                     Path.Combine(publicBaseUrl, session.Username)).Wait(); 

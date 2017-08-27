@@ -16,12 +16,13 @@ namespace Telegram.Bot.Mvc.Framework
 
         public User BotInfo { get; protected set; }
         public ITelegramBotClient Bot { get; protected set; }
-
+        public string Token { get; protected set; }
 
 
         public BotListener(string token, IBotRouter router, ILogger logger) {
             _router = router;
             _logger = logger;
+            Token = token;
             Bot = new TelegramBotClient(token);
             BotInfo = Bot.GetMeAsync().Result;
             Bot.OnReceiveError += Bot_OnReceiveError;
@@ -55,7 +56,7 @@ namespace Telegram.Bot.Mvc.Framework
 
         public BotSession Start() {
             Bot.StartReceiving();
-            if(_session == null) _session = new BotSession(Bot, _router, _logger);
+            if(_session == null) _session = new BotSession(Bot, _router, _logger, Token);
             return _session;
         }
 

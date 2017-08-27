@@ -18,15 +18,16 @@ namespace Telegram.Bot.Mvc.Framework
         public IBotRouter Router { get; protected set; }
         public ITelegramBotClient Bot { get; protected set; }
 
+        public string Token { get; protected set; }
 
         public IDictionary<ChatId, ChatSession> ChatSessions { get; protected set; } = new Dictionary<ChatId, ChatSession>();
 
-        public dynamic BotBag { get; protected set; } = new ExpandoObject();
-
-        public BotSession(ITelegramBotClient client, IBotRouter router, ILogger logger) {
+        public BotSession(ITelegramBotClient client, IBotRouter router, ILogger logger, string token) {
             Bot = client;
             Logger = logger;
             Router = router;
+            Token = token;
+            Clear();
             BotInfo = client.GetMeAsync().Result;
         }
 
@@ -35,6 +36,27 @@ namespace Telegram.Bot.Mvc.Framework
             using (var stream = new System.IO.FileStream(certificatePath, System.IO.FileMode.Open, System.IO.FileAccess.Read))
             {
                 await Bot.SetWebhookAsync(webHookPath, new FileToSend("cer.pem", stream));
+            }
+        }
+
+
+        public void Clear()
+        {
+            _bag = new Dictionary<string, object>();
+        }
+
+        private IDictionary<string, object> _bag;
+
+        public object this[string key]
+        {
+            get
+            {
+                _bag.TryGetValue(key, out object result);
+                return result;
+            }
+            set
+            {
+                _bag[key] = value;
             }
         }
     }
