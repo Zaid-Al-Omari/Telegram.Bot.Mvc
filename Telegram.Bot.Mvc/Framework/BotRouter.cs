@@ -45,7 +45,7 @@ namespace Telegram.Bot.Mvc.Framework {
             }
 
             int parametersCount = parameters == null ? 0 : parameters.Length;
-            string command = pathFragments[0].ToLowerInvariant().TrimStart('/');
+            string command = pathFragments[0].ToLowerInvariant();
 
             // Controller & Method Resolution...
             var resolutionResult = Controllers.Select(x =>
