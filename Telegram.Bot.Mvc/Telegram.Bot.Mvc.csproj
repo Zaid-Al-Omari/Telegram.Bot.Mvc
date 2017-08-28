@@ -10,6 +10,7 @@
     <PackageReleaseNotes>A working release for standalone and webhooks.</PackageReleaseNotes>
     <Copyright>Copyright 2017 (c) Zaid Al-Omari. All rights reserved.</Copyright>
     <PackageTags>telegram bot mvc framework client</PackageTags>
+    <Configurations>Debug;Release;Production</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Mvc.Core;
+using Telegram.Bot.Types.Enums;
 
 namespace Telegram.Bot.Mvc.Framework
 {
@@ -54,9 +55,10 @@ namespace Telegram.Bot.Mvc.Framework
             _logger.Log(e.ApiRequestException);
         }
 
-        public BotSession Start() {
-            Bot.StartReceiving();
-            if(_session == null) _session = new BotSession(Bot, _router, _logger, Token);
+        public BotSession Start(params UpdateType[] updateTypes)   {
+            if (_session == null) _session = new BotSession(Bot, _router, _logger, Token);
+            Bot.SetWebhookAsync().Wait();
+            Bot.StartReceiving(updateTypes);
             return _session;
         }
 

@@ -31,7 +31,7 @@ namespace Telegram.Bot.Mvc.Scheduler
             _thread.Start();
         }
 
-        public void Clear(int? priority)
+        public void Clear(int? priority = null)
         {
             _queue.Clear(priority);
         }

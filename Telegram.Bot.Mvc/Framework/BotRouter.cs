@@ -29,8 +29,11 @@ namespace Telegram.Bot.Mvc.Framework {
             // Data Parsing ...
             string body = context.Update.Message?.Text;
             if (context.Update.Type == UpdateType.CallbackQueryUpdate) body = context.Update.CallbackQuery?.Data;
+            if (context.Update.Type == UpdateType.InlineQueryUpdate) body = context.Update.InlineQuery?.Query;
+
             if (string.IsNullOrEmpty(body)) body = "";
-            string[] pathFragments; object[] parameters;
+            string[] pathFragments;
+            object[] parameters;
             if (body.StartsWith("/")) {
                 pathFragments = body.Split(' ');
                 parameters = new object[pathFragments.Length - 1];
@@ -42,7 +45,7 @@ namespace Telegram.Bot.Mvc.Framework {
             }
 
             int parametersCount = parameters == null ? 0 : parameters.Length;
-            string command = pathFragments[0].ToLowerInvariant();
+            string command = pathFragments[0].ToLowerInvariant().TrimStart('/');
 
             // Controller & Method Resolution...
             var resolutionResult = Controllers.Select(x =>
@@ -60,8 +63,22 @@ namespace Telegram.Bot.Mvc.Framework {
                 resolutionResult.Method.Name,
                 parameters == null ? new string[] { body }.AsEnumerable() : parameters.Select(x => x == null ? "null" : x.ToString())
                 );
+
+            // Parameters Optimization ...
+            var methodParametersCount = resolutionResult.Method.GetParameters().Count();
+            var optimizedParameters = new object[methodParametersCount];
+            if (parameters != null && methodParametersCount < parameters.Length)
+            {
+                Array.Copy(parameters, 0, optimizedParameters, 0, methodParametersCount);
+                optimizedParameters[optimizedParameters.Length - 1] = string.Join(" ", parameters.Where((x, i) => i >= methodParametersCount - 1));
+            }
+            else if(methodParametersCount == 1 && parameters == null)
+            {
+                optimizedParameters[0] = body;
+            }
+
             // Method Invocation ...
-            return resolutionResult.Method.Invoke(controller, parameters) as Task;
+            return resolutionResult.Method.Invoke(controller, optimizedParameters.Length == 0 ? null : optimizedParameters) as Task;
         }
 
         protected MethodInfo GetMethod(BotContext context, Type controllerType, string path, int paramaetersCount) {
@@ -75,9 +92,6 @@ namespace Telegram.Bot.Mvc.Framework {
 
             if (candidates.Count() > 1) return null; //throw new Exception("Multiable Methods With The Same Path!");
             var method = candidates.FirstOrDefault();
-            if (method == null) {
-                method = controllerType.GetTypeInfo().GetMethod(path.TrimStart('/'), BindingFlags.IgnoreCase);
-            }
             if (method == null) {
                 method = controllerType.GetTypeInfo().GetMethods()
                    .FirstOrDefault(x => x.GetCustomAttributes(typeof(AnyPathAttribute), false).Any(z =>
