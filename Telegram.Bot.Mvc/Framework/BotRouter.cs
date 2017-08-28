@@ -67,7 +67,7 @@ namespace Telegram.Bot.Mvc.Framework {
             // Parameters Optimization ...
             var methodParametersCount = resolutionResult.Method.GetParameters().Count();
             var optimizedParameters = new object[methodParametersCount];
-            if (parameters != null && methodParametersCount < parameters.Length)
+            if (parameters != null && methodParametersCount != 0 && methodParametersCount <= parameters.Length)
             {
                 Array.Copy(parameters, 0, optimizedParameters, 0, methodParametersCount);
                 optimizedParameters[optimizedParameters.Length - 1] = string.Join(" ", parameters.Where((x, i) => i >= methodParametersCount - 1));
