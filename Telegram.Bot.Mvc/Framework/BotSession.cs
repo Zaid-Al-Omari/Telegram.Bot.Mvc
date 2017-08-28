@@ -20,7 +20,7 @@ namespace Telegram.Bot.Mvc.Framework
 
         public string Token { get; protected set; }
 
-        public IDictionary<ChatId, ChatSession> ChatSessions { get; protected set; } = new Dictionary<ChatId, ChatSession>();
+        public IDictionary<long, ChatSession> ChatSessions { get; protected set; } = new Dictionary<long, ChatSession>();
 
         public BotSession(ITelegramBotClient client, IBotRouter router, ILogger logger, string token) {
             Bot = client;

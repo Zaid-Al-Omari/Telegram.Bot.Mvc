@@ -13,9 +13,14 @@ namespace Telegram.Bot.Mvc.Framework {
         protected IEnumerable<Type> Controllers { get; }
         protected IBotControllerFactory ControllerFactory { get; set; }
 
-        public BotRouter(IBotControllerFactory factory) {
+        public BotRouter(IBotControllerFactory factory) : this(factory, Assembly.GetEntryAssembly()) {
+
+        }
+
+        public BotRouter(IBotControllerFactory factory, Assembly controllersAssembly)
+        {
             ControllerFactory = factory;
-            Controllers = Assembly.GetEntryAssembly().GetTypes()
+            Controllers = controllersAssembly.GetTypes()
                 .Where(x => x.GetTypeInfo().IsSubclassOf(typeof(BotController)))
                 .Select(x => x).ToList();
         }

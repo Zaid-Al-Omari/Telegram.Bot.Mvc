@@ -6,11 +6,11 @@ using Telegram.Bot.Types;
 namespace Telegram.Bot.Mvc.Framework {
     public class ChatSession {
 
-        public ChatSession(ChatId chatId) {
+        public ChatSession(long chatId) {
             ChatId = chatId;
             Clear();
         }
-        public ChatId ChatId { get; set; }
+        public long ChatId { get; set; }
         
 
         public void Clear()
