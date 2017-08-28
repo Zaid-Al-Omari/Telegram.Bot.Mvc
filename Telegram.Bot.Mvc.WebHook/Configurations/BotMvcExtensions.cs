@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Telegram.Bot.Mvc.Core;
 using Telegram.Bot.Mvc.Framework;
@@ -12,6 +13,8 @@ namespace Telegram.Bot.Mvc.WebHook.Configurations
 {
     public static class BotMvcExtensions
     {
+
+        // ToDo: Configure these statics ...
         private static string certificateFilePath = Path.Combine(Environment.CurrentDirectory, "Certificate", "cer.pem");
         private static string publicBaseUrl = "https://example.com/api/Webhooks/"; // should be mapped in UseMvc
         private static bool registerCertificate = true;
@@ -24,9 +27,21 @@ namespace Telegram.Bot.Mvc.WebHook.Configurations
 
         public static IServiceCollection AddBotMvc(this IServiceCollection services)
         {
+            // use your own implementation of ILogger ...
             var logger = new Logger();
+            
+            // use PerSecondScheduler to throttle the outgoing messages to 30 messages per second using a multi-level priority queue...
             var scheduler = new PerSecondScheduler(logger, tasksCount: 30, inSeconds: 1);
-            var router = new BotRouter(new BotControllerFactory(scheduler));
+
+            // if your controllers are in a differant assembly change it here ...
+
+            var controllersAssembly = Assembly.GetEntryAssembly();
+            // var controllersAssembly = typeof(Controllers.HelloController).Assembly
+
+            var router = new BotRouter(
+                factory: new BotControllerFactory(scheduler), 
+                controllersAssembly: controllersAssembly);
+
             services.AddSingleton<ILogger>(logger);
             services.AddSingleton(router);
             services.AddSingleton(scheduler);
