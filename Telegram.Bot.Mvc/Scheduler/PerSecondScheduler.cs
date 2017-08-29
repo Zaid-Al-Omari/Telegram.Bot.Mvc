@@ -52,6 +52,7 @@ namespace Telegram.Bot.Mvc.Scheduler
                 {
                     if (i > 0) _semaphore.WaitOne();
                     tasks[i].Start();
+                    await tasks[i];
                     if (i > 0) _semaphore.Release();
                     await Task.Delay(delay);
                 }

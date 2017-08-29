@@ -46,8 +46,26 @@ namespace Telegram.Bot.Mvc.Framework {
             get
             {
                 if(_chat == null) {
-                    if (Message != null) _chat = Message.Chat;
-                    if (Query != null) _chat = Query.Message.Chat;
+                    switch (Update.Type)
+                    {
+                        case Types.Enums.UpdateType.MessageUpdate:
+                            _chat = Context.Update.Message.Chat;
+                            break;
+                        case Types.Enums.UpdateType.CallbackQueryUpdate:
+                            _chat = Context.Update.CallbackQuery.Message.Chat;
+                            break;
+                        case Types.Enums.UpdateType.EditedMessage:
+                            _chat = Context.Update.EditedMessage.Chat;
+                            break;
+                        case Types.Enums.UpdateType.ChannelPost:
+                            _chat = Context.Update.ChannelPost.Chat;
+                            break;
+                        case Types.Enums.UpdateType.EditedChannelPost:
+                            _chat = Context.Update.EditedChannelPost.Chat;
+                            break;
+                        default:
+                            break;
+                    }
                 }
                 return _chat;
             }
@@ -59,8 +77,38 @@ namespace Telegram.Bot.Mvc.Framework {
             get
             {
                 if (_user == null) {
-                    if (Message != null) _user = Message.From;
-                    if (Query != null) _user = Query.From;
+                    switch (Update.Type)
+                    {
+                        case Types.Enums.UpdateType.MessageUpdate:
+                            _user = Context.Update.Message.From;
+                            break;
+                        case Types.Enums.UpdateType.CallbackQueryUpdate:
+                            _user = Context.Update.CallbackQuery.From;
+                            break;
+                        case Types.Enums.UpdateType.EditedMessage:
+                            _user = Context.Update.EditedMessage.From;
+                            break;
+                        case Types.Enums.UpdateType.ChannelPost:
+                            _user = Context.Update.ChannelPost.From;
+                            break;
+                        case Types.Enums.UpdateType.EditedChannelPost:
+                            _user = Context.Update.EditedChannelPost.From;
+                            break;
+                        case Types.Enums.UpdateType.InlineQueryUpdate:
+                            _user = Context.Update.InlineQuery.From;
+                            break;
+                        case Types.Enums.UpdateType.ChosenInlineResultUpdate:
+                            _user = Context.Update.ChosenInlineResult.From;
+                            break;
+                        case Types.Enums.UpdateType.PreCheckoutQueryUpdate:
+                            _user = Context.Update.PreCheckoutQuery.From;
+                            break;
+                        case Types.Enums.UpdateType.ShippingQueryUpdate:
+                            _user = Context.Update.ShippingQuery.From;
+                            break;
+                        default:
+                            break;
+                    }
                 }
                 return _user;
             }
