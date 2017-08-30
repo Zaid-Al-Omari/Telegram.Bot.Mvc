@@ -177,21 +177,21 @@ namespace Telegram.Bot.Mvc.Scheduler
         private volatile int _currentQueue = 0;
         private Queue<T> GetCurrentQueue()
         {
-            int i = _currentQueue;
-            for (int tries = 0; tries < PRIORITY_MAX; tries++)
+            int tries = 0;
+            while (true)
             {
-                int currentSlot = Volatile.Read(ref _currantQueueSlots[i]);
+                int currentSlot = Volatile.Read(ref _currantQueueSlots[_currentQueue]);
                 if (currentSlot > 0)
-                {
-                    int queueItemsCount;
-                    lock (_queue[i]) { queueItemsCount = _queue[i].Count; }
-                    if (queueItemsCount > 0) return _queue[i];
-                }
-                Volatile.Write(ref _currantQueueSlots[i], QUEUE_SLOTS[i]);
+                    lock (_queue[_currentQueue])
+                        if (_queue[_currentQueue].Count > 0) {
+                            var newValue = Interlocked.Decrement(ref _currantQueueSlots[_currentQueue]);
+                            return _queue[_currentQueue];
+                        }
+                Volatile.Write(ref _currantQueueSlots[_currentQueue], QUEUE_SLOTS[_currentQueue]);
                 _currentQueue = (_currentQueue + 1) % PRIORITY_MAX;
-                i = (i + 1) % PRIORITY_MAX;
+                tries++;
+                if(tries >= PRIORITY_MAX * 2) return null;
             }
-            return null;
         }
 
         public T Dequeue()
