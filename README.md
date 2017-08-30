@@ -1,5 +1,7 @@
 # Telegram.Bot.Mvc
 
+[![Build status](https://ci.appveyor.com/api/projects/status/xntyrljf5rdjsmf4?svg=true)](https://ci.appveyor.com/project/Zaid-Al-Omari/telegram-bot-mvc)
+
 * Just like Asp.net MVC.
 * Establish command routes. (`/start`,  `/help`,  etc.)
 * Create bot controllers.
@@ -24,7 +26,7 @@ Prerequisites
 Working As Standalone Console Application (Pull)
 ------------------------------------------------
 
-```
+```csharp
 private static void Main(string[] args)
 {
     var listener = new BotListener("<token here>", new Logger());
@@ -36,7 +38,7 @@ private static void Main(string[] args)
 
 And then create a controller that inherits `BotController`...
 
-```
+```csharp
 public class HelloController : BotController
 {
     [BotPath("/start", UpdateType.MessageUpdate)]
