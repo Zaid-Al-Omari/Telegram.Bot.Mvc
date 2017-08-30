@@ -26,7 +26,7 @@ Prerequisites
 Working As Standalone Console Application (Pull)
 ------------------------------------------------
 
-```
+```csharp
 private static void Main(string[] args)
 {
     var listener = new BotListener("<token here>", new Logger());
@@ -38,7 +38,7 @@ private static void Main(string[] args)
 
 And then create a controller that inherits `BotController`...
 
-```
+```csharp
 public class HelloController : BotController
 {
     [BotPath("/start", UpdateType.MessageUpdate)]
