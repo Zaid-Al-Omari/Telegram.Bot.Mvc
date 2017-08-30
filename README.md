@@ -1,10 +1,10 @@
 # Telegram.Bot.Mvc
 
 * Just like Asp.net MVC.
-* Establish command routes. (/start,  /help,  etc.)
+* Establish command routes. (`/start`,  `/help`,  etc.)
 * Create bot controllers.
 * Automatic parameters binding.
-* Works both for webHooks & stand Alone.
+* Works both for **webhooks** and **standalone**.
 * Handle user data in sessions.
 * Supports multi-tenancy.
 * Throttle outgoing requests using the scheduler. No more *429: Too Many Requests* :)
@@ -15,11 +15,10 @@ Install the [package](https://www.nuget.org/packages/Telegram.Bot.Mvc) into your
 ```
 Install-Package Telegram.Bot.Mvc
 ```
-
-### Prerequisites
+Prerequisites
 
 ```
-.Net Core 2.0
+.netcore2.0
 ```
 
 Working As Standalone Console Application (Pull)
@@ -28,14 +27,14 @@ Working As Standalone Console Application (Pull)
 ```
 private static void Main(string[] args)
 {
-    var listener = new BotListener("<token here>", Logger);
+    var listener = new BotListener("<token here>", new Logger());
     listener.Start();
     Console.WriteLine("BOT STARTED: " + listener.BotInfo.Username);
     Console.ReadLine();
 }
 ```
 
-And then ...
+And then create a controller that inherits `BotController`...
 
 ```
 public class HelloController : BotController
