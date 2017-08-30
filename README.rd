@@ -1,4 +1,4 @@
-﻿# Telegram.Bot.Mvc
+# Telegram.Bot.Mvc
 
 An MVC-like framework to create Telegram bots compatable with *.Net Core 2.0*
 
