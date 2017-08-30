@@ -1,4 +1,4 @@
-﻿# Telegram.Bot.Mvc
+# Telegram.Bot.Mvc
 
 ![Telegram.Bot.Mvc](https://github.com/Zaid-Al-Omari/Telegram.Bot.Mvc/blob/master/Telegram.Bot.Mvc/pkg-icon.png?raw=true "Telegram.Bot.Mvc")
 An MVC-like framework to create Telegram bots compatable with *.Net Core 2.0*
