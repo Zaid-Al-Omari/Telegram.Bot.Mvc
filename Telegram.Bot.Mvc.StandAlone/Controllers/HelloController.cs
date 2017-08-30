@@ -10,7 +10,6 @@ namespace Telegram.Bot.Mvc.StandAlone.Controllers
 {
     public class HelloController : BotController
     {
-
         [BotPath("/start", UpdateType.MessageUpdate)]
         public async Task Start()
         {
