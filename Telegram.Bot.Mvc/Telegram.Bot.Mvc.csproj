@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>Telegram.Bot.Mvc</PackageId>
-    <PackageVersion>1.0.3</PackageVersion>
+    <PackageVersion>1.0.4</PackageVersion>
     <Authors>Zaid Al-Omari</Authors>
     <Description>An MVC-like framework to create Telegram bots</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
