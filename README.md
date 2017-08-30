@@ -1,5 +1,7 @@
 # Telegram.Bot.Mvc
 
+[![Build status](https://ci.appveyor.com/api/projects/status/xntyrljf5rdjsmf4?svg=true)](https://ci.appveyor.com/project/Zaid-Al-Omari/telegram-bot-mvc)
+
 * Just like Asp.net MVC.
 * Establish command routes. (`/start`,  `/help`,  etc.)
 * Create bot controllers.
