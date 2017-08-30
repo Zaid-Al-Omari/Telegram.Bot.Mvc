@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Telegram.Bot.Mvc.Core;
 using Telegram.Bot.Mvc.Framework;
 using Telegram.Bot.Mvc.WebHook.Configurations;
 using Telegram.Bot.Types;
@@ -17,7 +18,7 @@ namespace Telegram.Bot.Mvc.WebHook.Controllers
             [FromRoute] string botUsername, 
             [FromBody] Update update, 
             [FromServices] IDictionary<string, BotSession> sessions,
-            [FromServices] Logger logger)
+            [FromServices] ILogger logger)
         {
             BotContext context = null;
             BotSession session = null;

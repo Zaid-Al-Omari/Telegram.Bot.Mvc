@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using Telegram.Bot.Mvc.Core;
+using Telegram.Bot.Mvc.Framework;
 
-namespace Telegram.Bot.Mvc.WebHook.Configurations
+namespace Telegram.Bot.Mvc.Extensions
 {
     public class Logger : ILogger
     {
@@ -18,6 +19,19 @@ namespace Telegram.Bot.Mvc.WebHook.Configurations
             }
             error += "\t" + ex.Message;
             Console.WriteLine(error);
+        }
+
+        public void LogStats(BotContext context, string type)
+        {
+            var message = "";
+            message += string.Format("INFO:\t /{0}/{1}/{2}: \n",
+                 context.RouteData.Controller,
+                 context.RouteData.Method,
+                 string.Join(",", context.RouteData.Parameters));
+            message += "\t" + context.User?.Id + "\t";
+            message += type ;
+            
+          Console.WriteLine(message);
         }
     }
 }

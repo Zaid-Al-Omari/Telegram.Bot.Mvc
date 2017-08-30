@@ -7,7 +7,7 @@ using Telegram.Bot.Mvc.Core;
 
 namespace Telegram.Bot.Mvc.Scheduler
 {
-    public class PerSecondScheduler : IDisposable
+    public class PerSecondScheduler : ISchedualer
     {
         private ILogger _logger;
         private int _tasksCount;
@@ -31,21 +31,36 @@ namespace Telegram.Bot.Mvc.Scheduler
             _thread.Start();
         }
 
-        public void Clear(int? priority = null)
+        public void Clear(uint priority)
         {
             _queue.Clear(priority);
         }
 
-        public void Enqueue(Task task, int priority = 0)
+        public void Clear()
         {
-            if (task == null) return;
+            _queue.Clear(null);
+        }
+
+        public void Enqueue(Action action, uint priority = 0)
+        {
+            if (action == null) return;
+            Enqueue(new Task(action), priority: priority);
+        }
+
+        public void Enqueue(int delay = 1000, uint priority = 0, params Action[] actions)
+        {
+            if (actions == null || actions.Length == 0) return;
+            Enqueue(delay, priority, actions.Select(x => new Task(x)).ToArray());
+        }
+
+        public void Enqueue(Task task, uint priority = 0)
+        {
             _queue.Enqueue(task, priority: priority);
             Resume();
         }
 
-        public void Enqueue(int delay = 1000, int priority = 0, params Task[] tasks)
+        public void Enqueue(int delay = 1000, uint priority = 0, params Task[] tasks)
         {
-            if (tasks == null || tasks.Length == 0) return;
             var compiledTask = new Task(async () =>
             {
                 for (int i = 0; i < tasks.Length; i++)
@@ -149,7 +164,7 @@ namespace Telegram.Bot.Mvc.Scheduler
             }
         }
 
-        public void Enqueue(T item, int priority = 0)
+        public void Enqueue(T item, uint priority = 0)
         {
             if (item == null) return;
             lock (_queue[priority])
@@ -191,7 +206,7 @@ namespace Telegram.Bot.Mvc.Scheduler
             return t;
         }
 
-        public void Clear(int? priority)
+        public void Clear(uint? priority)
         {
             if (priority.HasValue)
             {
@@ -202,7 +217,7 @@ namespace Telegram.Bot.Mvc.Scheduler
             }
             else
             {
-                for (int i = 0; i < PRIORITY_MAX; i++) Clear(i);
+                for (uint i = 0; i < PRIORITY_MAX; i++) Clear(i);
             }
         }
 

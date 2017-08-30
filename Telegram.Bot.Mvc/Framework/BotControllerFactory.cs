@@ -5,8 +5,8 @@ using Telegram.Bot.Mvc.Scheduler;
 namespace Telegram.Bot.Mvc.Framework {
     public class BotControllerFactory : IBotControllerFactory
     {
-        private PerSecondScheduler _scheduler;
-        public BotControllerFactory(PerSecondScheduler scheduler)
+        private ISchedualer _scheduler;
+        public BotControllerFactory(ISchedualer scheduler)
         {
             _scheduler = scheduler;
         }

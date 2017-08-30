@@ -6,6 +6,7 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Mvc.Core;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Mvc.Scheduler;
 
 namespace Telegram.Bot.Mvc.Framework
 {
@@ -32,7 +33,7 @@ namespace Telegram.Bot.Mvc.Framework
         }
 
         public BotListener(string token, ILogger logger) 
-            : this(token, new BotRouter(new BotControllerFactory(new Scheduler.PerSecondScheduler(logger, 30, 1))), logger)
+            : this(token, new BotRouter(new BotControllerFactory(new PerSecondScheduler(logger, 30, 1))), logger)
         {
 
         }

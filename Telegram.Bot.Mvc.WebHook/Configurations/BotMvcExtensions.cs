@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Telegram.Bot.Mvc.Core;
+using Telegram.Bot.Mvc.Extensions;
 using Telegram.Bot.Mvc.Framework;
 using Telegram.Bot.Mvc.Scheduler;
 

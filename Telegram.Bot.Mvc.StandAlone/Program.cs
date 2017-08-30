@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using Telegram.Bot.Mvc.Framework;
 using System.Configuration;
+using Telegram.Bot.Mvc.Extensions;
+using Telegram.Bot.Mvc.Core;
+
 namespace Telegram.Bot.Mvc.StandAlone
 {
     class Program
     {
         // For running bots that are multi-tenants uncomment ...
         //private static Dictionary<string, BotListener> Listeners = new Dictionary<string, BotListener>();
-        private static Logger Logger = new Logger();
+        private static ILogger Logger = new Logger();
         private static void Main(string[] args)
         {
             while (true)
