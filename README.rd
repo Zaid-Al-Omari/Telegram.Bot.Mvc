@@ -1,17 +1,19 @@
-# Telegram.Bot.Mvc
+Telegram.Bot.Mvc
+==================
 
 An MVC-like framework to create Telegram bots compatable with *.Net Core 2.0*
 
-	* Just like Asp.net MVC.
-	* Establish command routes. (/start,  /help,  etc.)
-	* Create bot controllers.
-	* Automatic parameters binding.
-	* Works both for webHooks & stand Alone.
-	* Handle user data in sessions.
-	* Supports multi-tenancy.
-	* Throttle outgoing requests using the scheduler. No more *429: Too Many Requests* :)
+* Just like Asp.net MVC.
+* Establish command routes. (/start,  /help,  etc.)
+*  Create bot controllers.
+* Automatic parameters binding.
+*  Works both for webHooks & stand Alone.
+* Handle user data in sessions.
+*  Supports multi-tenancy.
+* Throttle outgoing requests using the scheduler. No more *429: Too Many Requests* :)
 
-## Getting Started
+Getting Started
+----------------------
 
 Install the [package](https://www.nuget.org/packages/Telegram.Bot.Mvc) into your project using Nuget Package Manager.
 ```
