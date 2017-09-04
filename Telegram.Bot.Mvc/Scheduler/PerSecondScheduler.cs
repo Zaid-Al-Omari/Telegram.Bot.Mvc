@@ -104,14 +104,22 @@ namespace Telegram.Bot.Mvc.Scheduler
                 _semaphore.WaitOne();
                 var task = Task.Run(async () =>
                 {
-                    Task localTask = t;
-                    localTask.Start();
-                    _semaphore.Release();
-                    await localTask;
-                }).ContinueWith(x => { lock (handlers) { handlers.Remove(x); } })
-                  .ContinueWith(x => { _logger.Log(x.Exception); }, TaskContinuationOptions.OnlyOnFaulted);
+                    try
+                    {
+                        Task localTask = t;
+                        localTask.Start();
+                        _semaphore.Release();
+                        await localTask;
+                    }
+                    catch (Exception ex) {
+                        _logger.Log(ex);
+                    }
+                });
 
-                lock (handlers) { handlers.Add(task); }
+                lock (handlers) {
+                    handlers.Add(task);
+                    if(handlers.Count % 100 == 0) handlers.RemoveAll(x => x.IsCompleted);
+                }
                 await Task.Delay(_innerDelay);
             }
             handlers.Clear();
