@@ -5,6 +5,6 @@ namespace Telegram.Bot.Mvc.Core
 {
     public interface IBotRouter
     {
-        Task Route(BotContext context);
+        Task Route(BotContext context, IBotControllerFactory factory);
     }
 }

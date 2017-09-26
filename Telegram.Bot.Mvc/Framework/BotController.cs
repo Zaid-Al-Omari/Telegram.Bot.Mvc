@@ -4,9 +4,10 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Mvc.Core;
 using Telegram.Bot.Mvc.Scheduler;
+using System;
 
 namespace Telegram.Bot.Mvc.Framework {
-    public class BotController {
+    public abstract class BotController : IDisposable {
 
 
         public BotContext Context { get; set; }
@@ -41,5 +42,7 @@ namespace Telegram.Bot.Mvc.Framework {
         public CallbackQuery Query => Context.Update.CallbackQuery;
         public ILogger Logger => Context.BotSession.Logger;
         public ITelegramBotClient Bot => Context.Bot;
+
+        public abstract void Dispose();
     }
 }

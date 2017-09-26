@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Telegram.Bot.Mvc.Core;
 using Telegram.Bot.Mvc.Scheduler;
 
@@ -6,9 +7,12 @@ namespace Telegram.Bot.Mvc.Framework {
     public class BotControllerFactory : IBotControllerFactory
     {
         private ISchedualer _scheduler;
-        public BotControllerFactory(ISchedualer scheduler)
+        private readonly IEnumerable<Type> allControllers;
+
+        public BotControllerFactory(ISchedualer scheduler, IEnumerable<Type> allControllers)
         {
             _scheduler = scheduler;
+            this.allControllers = allControllers;
         }
         public BotController Create<TController>(BotContext context) where TController : BotController, new() {
             return new TController() {
@@ -24,6 +28,11 @@ namespace Telegram.Bot.Mvc.Framework {
             controller.Context = context;
             controller.Scheduler = _scheduler;
             return controller;
+        }
+
+        public IEnumerable<Type> GetControllers()
+        {
+            return allControllers;
         }
     }
 }

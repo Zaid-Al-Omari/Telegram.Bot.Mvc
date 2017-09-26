@@ -12,8 +12,9 @@ namespace Telegram.Bot.Mvc.Framework
 {
     public class BotListener  : IDisposable{
 
-        private ILogger _logger;
-        private IBotRouter _router;
+        private readonly ILogger _logger;
+        private readonly Func<IBotControllerFactory> _factoryCreator;
+        private readonly IBotRouter _router;
         private BotSession _session;
 
         public User BotInfo { get; protected set; }
@@ -21,9 +22,11 @@ namespace Telegram.Bot.Mvc.Framework
         public string Token { get; protected set; }
 
 
-        public BotListener(string token, IBotRouter router, ILogger logger) {
-            _router = router;
+        public BotListener(string token, ILogger logger, IBotRouter router, Func<IBotControllerFactory> factoryCreator) {
             _logger = logger;
+            _router = router;
+            _factoryCreator = factoryCreator;
+
             Token = token;
             Bot = new TelegramBotClient(token);
             BotInfo = Bot.GetMeAsync().Result;
@@ -32,27 +35,21 @@ namespace Telegram.Bot.Mvc.Framework
             Bot.OnUpdate += _bot_OnUpdate;
         }
 
-        public BotListener(string token, ILogger logger) 
-            : this(token, new BotRouter(new BotControllerFactory(new PerSecondScheduler(logger, 30, 1))), logger)
-        {
-
-        }
-
         private async void _bot_OnUpdate(object sender, Bot.Args.UpdateEventArgs e) {
             var context = new BotContext(null, _session, e.Update);
             try {
-                await _router.Route(context);
+                await _router.Route(context, _factoryCreator.Invoke());
             }
             catch (Exception ex) {
                 _logger.Log(ex, context.RouteData);
             }
         }
 
-        private void Bot_OnReceiveGeneralError(object sender, Telegram.Bot.Args.ReceiveGeneralErrorEventArgs e) {
+        private void Bot_OnReceiveGeneralError(object sender, Args.ReceiveGeneralErrorEventArgs e) {
             _logger.Log(e.Exception);
         }
 
-        private void Bot_OnReceiveError(object sender, Telegram.Bot.Args.ReceiveErrorEventArgs e) {
+        private void Bot_OnReceiveError(object sender, Args.ReceiveErrorEventArgs e) {
             _logger.Log(e.ApiRequestException);
         }
 
@@ -79,7 +76,6 @@ namespace Telegram.Bot.Mvc.Framework
                     // TODO: dispose managed state (managed objects).
                 }
                 Bot = null;
-                _router = null;
                 _session = null;
                 disposedValue = true;
             }

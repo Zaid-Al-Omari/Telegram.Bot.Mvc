@@ -8,24 +8,10 @@ using Telegram.Bot.Mvc.Core;
 
 namespace Telegram.Bot.Mvc.Framework {
     public class BotRouter : IBotRouter
-    {
+    { 
 
-        protected IEnumerable<Type> Controllers { get; }
-        protected IBotControllerFactory ControllerFactory { get; set; }
 
-        public BotRouter(IBotControllerFactory factory) : this(factory, Assembly.GetEntryAssembly()) {
-
-        }
-
-        public BotRouter(IBotControllerFactory factory, Assembly controllersAssembly)
-        {
-            ControllerFactory = factory;
-            Controllers = controllersAssembly.GetTypes()
-                .Where(x => x.GetTypeInfo().IsSubclassOf(typeof(BotController)))
-                .Select(x => x).ToList();
-        }
-
-        public Task Route(BotContext context) {
+        public Task Route(BotContext context, IBotControllerFactory factory) {
             // Data Parsing ...
             string body = context.Update.Message?.Text;
             if (context.Update.Type == UpdateType.CallbackQueryUpdate) body = context.Update.CallbackQuery?.Data;
@@ -48,56 +34,64 @@ namespace Telegram.Bot.Mvc.Framework {
             string command = pathFragments[0].ToLowerInvariant();
 
             // Controller & Method Resolution...
-            var resolutionResult = Controllers.Select(x =>
-                new {
+            var resolutionResult = factory.GetControllers()
+                .Select(x => new {
                     ControllerType = x,
                     Method = GetMethod(context, x, command, parametersCount)
-                }).FirstOrDefault(x => x.Method != null);
+                })
+                .OrderBy(x=> x.Method.GetCustomAttributes(typeof(AnyPathAttribute), false).Count())
+                .FirstOrDefault(x => x.Method != null);
             if (resolutionResult == null)
                 throw new Exception("Can't Find Method For Path: " + command + ", " + context.Update.Type.ToString());
 
-            // Controller Init ...
-            BotController controller = ControllerFactory.Create(resolutionResult.ControllerType, context);
-            context.RouteData = new BotRouteData(
-                controller.GetType().Name,
-                resolutionResult.Method.Name,
-                parameters == null ? new string[] { body }.AsEnumerable() : parameters.Select(x => x == null ? "null" : x.ToString())
-                );
-
             // Parameters Optimization ...
             var methodParametersCount = resolutionResult.Method.GetParameters().Count();
-            var optimizedParameters = new object[methodParametersCount];
-            if (parameters != null && methodParametersCount != 0 && methodParametersCount <= parameters.Length)
+            var optimizedParameters = OptimizedParameters(methodParametersCount, body, parameters);
+
+            // Controller Init ...
+            using (var controller = factory.Create(resolutionResult.ControllerType, context))
             {
-                Array.Copy(parameters, 0, optimizedParameters, 0, methodParametersCount);
-                optimizedParameters[optimizedParameters.Length - 1] = string.Join(" ", parameters.Where((x, i) => i >= methodParametersCount - 1));
+                context.RouteData = new BotRouteData(
+                                  controller.GetType().Name,
+                                  resolutionResult.Method.Name,
+                                  optimizedParameters.Select(x => x == null ? "null" : x.ToString())
+                              );
+
+                // Method Invocation ...
+                return resolutionResult.Method.Invoke(controller, optimizedParameters.Length == 0 ? null : optimizedParameters) as Task;
             }
-            else if(methodParametersCount == 1 && parameters == null)
+        }
+
+        protected object[] OptimizedParameters(int wantedCount, string body, object[] parameters)
+        {
+            var optimizedParameters = new object[wantedCount];
+            if (parameters != null && wantedCount != 0 && wantedCount <= parameters.Length)
+            {
+                Array.Copy(parameters, 0, optimizedParameters, 0, wantedCount);
+                optimizedParameters[optimizedParameters.Length - 1] = string.Join(" ", parameters.Where((x, i) => i >= wantedCount - 1));
+            }
+            else if (wantedCount == 1 && parameters == null)
             {
                 optimizedParameters[0] = body;
             }
-
-            // Method Invocation ...
-            return resolutionResult.Method.Invoke(controller, optimizedParameters.Length == 0 ? null : optimizedParameters) as Task;
+            return optimizedParameters;
         }
 
         protected MethodInfo GetMethod(BotContext context, Type controllerType, string path, int paramaetersCount) {
             var candidates = controllerType.GetTypeInfo().GetMethods()
                    .Where(x =>
-                        x.GetParameters().Length == paramaetersCount &&
                         x.GetCustomAttributes(typeof(BotPathAttribute), false).Any(z =>
                            (z as BotPathAttribute).Path.ToLowerInvariant() == path &&
                            (z as BotPathAttribute).UpdateType == context.Update.Type)
-                    );
+                    ).OrderByDescending(x=> x.GetParameters().Length);
 
-            if (candidates.Count() > 1) return null; //throw new Exception("Multiable Methods With The Same Path!");
-            var method = candidates.FirstOrDefault();
+            var method = candidates.FirstOrDefault(x => x.GetParameters().Length <= paramaetersCount);
             if (method == null) {
                 method = controllerType.GetTypeInfo().GetMethods()
                    .FirstOrDefault(x => x.GetCustomAttributes(typeof(AnyPathAttribute), false).Any(z =>
                         (z as AnyPathAttribute).UpdateType == context.Update.Type));
             }
-            if (method == null || method.ReturnType != typeof(Task)) return null; // throw new Exception("Can't Find Method For Path " + path);
+            if (method == null) return null; // throw new Exception("Can't Find Method For Path " + path);
             return method;
         }
 
