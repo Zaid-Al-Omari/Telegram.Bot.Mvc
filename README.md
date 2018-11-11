@@ -10,6 +10,7 @@
 * Handle user data in sessions.
 * Supports multi-tenancy.
 * Throttle outgoing requests using the scheduler. No more *429: Too Many Requests* :)
+* And More.
 
 ## Getting Started
 
